@@ -8,7 +8,7 @@ import { useRoute } from 'vue-router'
 
 import Map from '@/components/map.vue'
 import { DirectionFilled, HomeFilled, SettingsFilled, DirectionCurveFilled } from '@/components/icons/filled'
-import { HeatmapOutlined, ScatterMatrixOutlined } from '@/components/icons/outlined'
+import { HeatmapOutlined, ScatterMatrixOutlined, LocateOutlined } from '@/components/icons/outlined'
 import { inject, onMounted } from 'vue'
 import type { MapUtil } from '@/utils/map'
 
@@ -20,7 +20,7 @@ onMounted(() => map?.clearAllLayers());
 </script>
 
 <template>
-  <VNavigationDrawer expand-on-hover rail location="left">
+  <VNavigationDrawer location="left">
     <VList>
       <VListItem to="/" exact title="Home">
         <template #prepend>
@@ -31,6 +31,11 @@ onMounted(() => map?.clearAllLayers());
       <VListItem to="/matrix" exact title="Matrix">
         <template #prepend>
           <ScatterMatrixOutlined></ScatterMatrixOutlined>
+        </template>
+      </VListItem>
+      <VListItem to="/locate" exact title="Locate">
+        <template #prepend>
+          <LocateOutlined></LocateOutlined>
         </template>
       </VListItem>
       <VListItem to="/isochrone" exact title="Isochrone">

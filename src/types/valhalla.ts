@@ -142,6 +142,11 @@ export interface LocatePayload {
     locations: {
         lat: number;
         lon: number;
+        minimum_reachability?: number;
+        heading?: number;
+        radius?: number;
+        node_snap_tolerance?: number;
+        preferred_side?: 'either' | 'same' | 'opposite';
     }[];
     costing: string;
     directions_options: DirectionsOptions;
@@ -262,11 +267,11 @@ export interface LiveSpeed {
 // Isochrone API
 export interface IsochronePayload {
     locations: Location[];
-    costing:   string;
-    contours:  Contour[];
+    costing: string;
+    contours: Contour[];
 }
 
 export interface Contour {
-    time:  number;
+    time: number;
     color: string;
 }

@@ -18,7 +18,7 @@ const submit = async () => {
 
     const data = await valhallaStore.traceRoute(json.value);
 
-    const { polylines, alternatePolylines } = valhallaStore.getPolylines(data.trip, data.alternates);
+    const { polylines, alternatePolylines } = valhallaStore.getPolylines(data.trip, data.alternates ?? []);
 
     map?.addPolyLines(polylines);
     alternatePolylines.forEach((alternate) => {

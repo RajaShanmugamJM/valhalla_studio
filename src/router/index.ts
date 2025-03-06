@@ -27,6 +27,10 @@ const router = createRouter({
         {
           path: 'isochrone',
           component: () => import('../views/isochrone.vue'),
+        },
+        {
+          path: 'locate',
+          component: () => import('../views/locate.vue'),
         }
       ]
     },
