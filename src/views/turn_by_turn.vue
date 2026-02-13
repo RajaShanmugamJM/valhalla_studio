@@ -15,7 +15,7 @@ const map = inject<MapUtil>("map");
 
 const formTemplateRef = ref();
 const valhallaStore = useValhallaStore();
-const form = ref<{ source: number[] | null, destination: number[] | null }>({
+const form = ref<{ source: [number, number] | null, destination: [number, number] | null }>({
     source: null,
     destination: null,
 })

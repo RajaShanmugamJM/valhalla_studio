@@ -40,7 +40,7 @@ const fetchLocationDetails = async () => {
 }
 
 const locationName = computed(() => {
-    return locationDetail.value?.edges[0].edge_info.names[0] ?? "Unknown";
+    return locationDetail.value?.edges?.[0]?.edge_info?.names?.[0] ?? "Unknown";
 })
 
 watch(() => props.lat, (lat) => {

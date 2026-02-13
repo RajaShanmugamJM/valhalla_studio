@@ -28,7 +28,7 @@ const contourFormTemplateRef = ref();
 const contourModel = ref(false);
 const valhallaStore = useValhallaStore();
 
-const form = ref<{ source: number[] | null, contours: Contour[] }>({
+const form = ref<{ source: [number, number] | null, contours: Contour[] }>({
     source: null,
     contours: []
 })
