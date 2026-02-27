@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue'
 import Map from '@/components/map.vue'
+import Navigation from '@/components/navigation.vue'
 import SettingsModal from '@/components/settings/settings-modal.vue'
 import Button from '@/components/ui/button.vue'
 import type { MapUtil } from '@/utils/map'
@@ -13,6 +14,9 @@ const settingsOpen = ref(false)
   <div class="relative w-screen h-screen overflow-hidden">
     <!-- Fullscreen map -->
     <Map class="absolute inset-0 w-full h-full" />
+
+    <!-- Navigation Drawer & Menus -->
+    <Navigation />
 
     <!-- Zoom controls: fixed top-right -->
     <div class="fixed top-6 right-6 z-1000 flex flex-col gap-1">
