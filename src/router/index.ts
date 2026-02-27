@@ -7,29 +7,8 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('../views/home.vue'),
-      children: [
-        {
-          path: 'settings',
-          component: () => import('../views/settings.vue'),
-        },
-        {
-          path: 'trace_route',
-          component: () => import('../views/trace_route.vue'),
-        },
-        {
-          path: 'turn_by_turn',
-          component: () => import('../views/turn_by_turn.vue'),
-        },
-        {
-          path: 'matrix',
-          component: () => import('../views/matrix.vue'),
-        },
-        {
-          path: 'isochrone',
-          component: () => import('../views/isochrone.vue'),
-        }
-      ]
     },
   ],
 })
+
 export default router

@@ -1,20 +1,15 @@
 <script lang="ts" setup>
-import { inject, onMounted } from 'vue';
-import 'leaflet/dist/leaflet.css';
-import type { MapUtil } from '@/utils/map';
+import { inject, onMounted } from 'vue'
+import type { MapUtil } from '@/utils/map'
 
-const map = inject<MapUtil>("map");
-
-const initMap = () => {
-    if (!map) return;
-    map.initMap('map');
-}
+const map = inject<MapUtil>('map')
 
 onMounted(() => {
-    initMap();
+  if (!map) return
+  map.initMap('map')
 })
-
 </script>
+
 <template>
-    <div id="map" class="fill-height"></div>
+  <div id="map" class="w-full h-full"></div>
 </template>
