@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import axios from 'axios'
 import { useValhallaStore } from '@/stores/valhalla'
 import type { ValhallaConfigInterface } from '@/types/store'
+import AppButton from '@/components/ui/button.vue'
 
 const valhallaStore = useValhallaStore()
 const { valhallaConfig } = storeToRefs(valhallaStore)
@@ -68,7 +69,7 @@ const handleSave = async () => {
             </div>
 
             <!-- Authorization toggle -->
-            <div class="flex items-center justify-between">
+            <!-- <div class="flex items-center justify-between">
                 <label class="field-label">Enable Authorization</label>
                 <button type="button" role="switch" :aria-checked="form.isAuthRequired"
                     @click="form.isAuthRequired = !form.isAuthRequired"
@@ -77,20 +78,20 @@ const handleSave = async () => {
                     <span class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform"
                         :class="form.isAuthRequired ? 'translate-x-6' : 'translate-x-1'" />
                 </button>
-            </div>
+            </div> -->
 
             <!-- Auth Method -->
-            <template v-if="form.isAuthRequired">
+            <!-- <template v-if="form.isAuthRequired">
                 <div class="space-y-1">
                     <label class="field-label">Auth Method</label>
                     <select v-model="form.authMethod" class="field-input">
                         <option value="Basic">Basic</option>
                     </select>
                 </div>
-            </template>
+            </template> -->
 
             <!-- Basic auth credentials -->
-            <template v-if="form.isAuthRequired && form.authMethod === 'Basic'">
+            <!-- <template v-if="form.isAuthRequired && form.authMethod === 'Basic'">
                 <div class="space-y-1">
                     <label class="field-label">Username</label>
                     <input v-model="form.authBasicUsername" type="text" placeholder="Username" class="field-input" />
@@ -100,13 +101,13 @@ const handleSave = async () => {
                     <input v-model="form.authBasicPassword" type="password" placeholder="Password"
                         class="field-input" />
                 </div>
-            </template>
+            </template> -->
         </div>
 
-        <div class="pt-4 border-t border-stroke">
-            <button @click="handleSave" class="btn-primary w-auto inline-flex" :disabled="isSaving">
-                {{ isSaving ? 'Saving...' : 'Save Configuration' }}
-            </button>
+        <div class="flex justify-end">
+            <AppButton @click="handleSave" :loading="isSaving">
+                Save Configuration
+            </AppButton>
         </div>
     </div>
 </template>

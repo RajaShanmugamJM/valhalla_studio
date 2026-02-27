@@ -51,11 +51,6 @@ const components: Record<string, any> = {
                         </button>
                     </nav>
 
-                    <div class="p-4 border-t border-stroke">
-                        <button @click="emit('close')" class="btn-primary flex items-center justify-center gap-2">
-                            Done
-                        </button>
-                    </div>
                 </aside>
 
                 <!-- Main Content -->

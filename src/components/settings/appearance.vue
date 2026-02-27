@@ -13,15 +13,13 @@ onMounted(() => {
 
 const applyTheme = (newTheme: 'light' | 'dark' | 'system') => {
     const html = document.documentElement
+    html.removeAttribute('data-theme')
     if (newTheme === 'dark') {
-        html.classList.add('dark')
-        html.classList.remove('light')
+        html.setAttribute('data-theme', 'dark')
     } else if (newTheme === 'light') {
-        html.classList.add('light')
-        html.classList.remove('dark')
-    } else {
-        html.classList.remove('dark', 'light')
+        html.setAttribute('data-theme', 'light')
     }
+    // 'system' → no attribute, falls back to @media prefers-color-scheme
     localStorage.setItem('theme', newTheme)
     theme.value = newTheme
 }

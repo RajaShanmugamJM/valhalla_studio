@@ -37,7 +37,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --surface: #1e1e2e;
     --surface-subtle: #2d2d3f;
     --overlay: rgb(0 0 0 / 0.5);
@@ -55,4 +55,44 @@
     --error-border: #ef4444;
     --toggle-off: #4b5563;
   }
+}
+
+/* Manual dark mode override */
+:root[data-theme="dark"] {
+  --surface: #1e1e2e;
+  --surface-subtle: #2d2d3f;
+  --overlay: rgb(0 0 0 / 0.5);
+  --ink: #f9fafb;
+  --ink-secondary: #e5e7eb;
+  --ink-muted: #9ca3af;
+  --ink-placeholder: #6b7280;
+  --stroke: #374151;
+  --stroke-strong: #4b5563;
+  --accent: #3b82f8;
+  --accent-hover: #2563eb;
+  --accent-active: #1d4ed8;
+  --accent-ring: #60a5fa;
+  --error: #f87171;
+  --error-border: #ef4444;
+  --toggle-off: #4b5563;
+}
+
+/* Manual light mode override (force light even if OS is dark) */
+:root[data-theme="light"] {
+  --surface: #ffffff;
+  --surface-subtle: #f3f4f6;
+  --overlay: rgb(0 0 0 / 0.2);
+  --ink: #1f2937;
+  --ink-secondary: #374151;
+  --ink-muted: #6b7280;
+  --ink-placeholder: #9ca3af;
+  --stroke: #e5e7eb;
+  --stroke-strong: #d1d5db;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-active: #1e40af;
+  --accent-ring: #3b82f6;
+  --error: #ef4444;
+  --error-border: #f87171;
+  --toggle-off: #d1d5db;
 }
