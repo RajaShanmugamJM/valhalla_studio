@@ -79,6 +79,8 @@ export interface MapUtil<
     currentTileLayerId: Ref<TileLayerId>;
     initMap: (el: string) => void;
     changeTileLayer: (id: TileLayerId) => void;
+    zoomIn: () => void;
+    zoomOut: () => void;
     addGeoJson: (geoJson: any, options?: any, meta?: Record<string, any>) => void;
     addPolyLines: (polylines: number[][][], options?: PolylineOptions, meta?: Record<string, any>) => void;
     addMarker: (latitude: number, longitude: number, options?: { icon?: 'source' | 'destination', meta?: Record<string, any> }) => Marker;
@@ -101,7 +103,7 @@ export default function mapUtil() {
     let geoJsons = ref<GeoJsonDetail<Record<string, any>>[]>([])
 
     const initMap = (el: string) => {
-        const m = LeafletMap(el).setView([9.9178343, 78.0815385], 11);
+        const m = LeafletMap(el, { zoomControl: false }).setView([9.9178343, 78.0815385], 11);
         map.value = m;
         const savedId = (localStorage.getItem('tile_layer') as TileLayerId) || 'osm';
         currentTileLayerId.value = savedId;
@@ -110,6 +112,14 @@ export default function mapUtil() {
             maxZoom: def.maxZoom,
             attribution: def.attribution
         }).addTo(m);
+    }
+
+    const zoomIn = () => {
+        map.value?.zoomIn();
+    }
+
+    const zoomOut = () => {
+        map.value?.zoomOut();
     }
 
     const changeTileLayer = (id: TileLayerId) => {
@@ -273,6 +283,8 @@ export default function mapUtil() {
         currentTileLayerId,
         initMap,
         changeTileLayer,
+        zoomIn,
+        zoomOut,
         addGeoJson,
         addMarker,
         removeMarker,
