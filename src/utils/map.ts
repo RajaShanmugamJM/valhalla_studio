@@ -1,9 +1,71 @@
-import { polyline, marker, map as LeafletMap, tileLayer, icon, type Map, type Marker, type PolylineOptions, Polyline, geoJSON } from 'leaflet';
-import { ref, type Ref } from 'vue';
+import { polyline, marker, map as LeafletMap, tileLayer, icon, type Map, type Marker, type TileLayer, type PolylineOptions, Polyline, geoJSON } from 'leaflet';
+import { ref, shallowRef, type Ref, type ShallowRef } from 'vue';
 
 export interface MarkerDetail<T> { id: string, meta?: T };
 export interface PolylineDetail<T> { id: string, meta?: T };
 export interface GeoJsonDetail<T> { id: string, meta?: T };
+
+export interface TileLayerDefinition {
+    id: string;
+    name: string;
+    description: string;
+    url: string;
+    attribution: string;
+    maxZoom: number;
+}
+
+export const TILE_LAYERS: Record<string, TileLayerDefinition> = {
+    osm: {
+        id: 'osm',
+        name: 'OpenStreetMap',
+        description: 'Standard OSM tiles',
+        url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+    },
+    osm_hot: {
+        id: 'osm_hot',
+        name: 'OSM Humanitarian',
+        description: 'HOT humanitarian style',
+        url: 'https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/">HOT</a>',
+        maxZoom: 19,
+    },
+    cartodb_light: {
+        id: 'cartodb_light',
+        name: 'CartoDB Light',
+        description: 'Clean light-grey basemap',
+        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        maxZoom: 19,
+    },
+    cartodb_dark: {
+        id: 'cartodb_dark',
+        name: 'CartoDB Dark',
+        description: 'Dark matter basemap',
+        url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        maxZoom: 19,
+    },
+    esri_world: {
+        id: 'esri_world',
+        name: 'ESRI Satellite',
+        description: 'World imagery from ESRI',
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        maxZoom: 18,
+    },
+    stadia_toner: {
+        id: 'stadia_toner',
+        name: 'Stadia Toner',
+        description: 'High-contrast black & white',
+        url: 'https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png',
+        attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://stamen.com">Stamen Design</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 20,
+    },
+};
+
+export type TileLayerId = keyof typeof TILE_LAYERS;
 
 export interface MapUtil<
     MarkerMeta = Record<string, any>,
@@ -14,7 +76,9 @@ export interface MapUtil<
     markers: Ref<MarkerDetail<MarkerMeta | Record<string, any>>[]>;
     polylines: Ref<PolylineDetail<PolylineMeta | Record<string, any>>[]>;
     geoJsons: Ref<GeoJsonDetail<GeoJsonMeta | Record<string, any>>[]>;
+    currentTileLayerId: Ref<TileLayerId>;
     initMap: (el: string) => void;
+    changeTileLayer: (id: TileLayerId) => void;
     addGeoJson: (geoJson: any, options?: any, meta?: Record<string, any>) => void;
     addPolyLines: (polylines: number[][][], options?: PolylineOptions, meta?: Record<string, any>) => void;
     addMarker: (latitude: number, longitude: number, options?: { icon?: 'source' | 'destination', meta?: Record<string, any> }) => Marker;
@@ -26,7 +90,11 @@ export interface MapUtil<
 }
 
 export default function mapUtil() {
-    let map = ref<Map | undefined>();
+    let map = shallowRef<Map | undefined>();
+    let activeTileLayer = shallowRef<TileLayer | undefined>();
+    let currentTileLayerId = ref<TileLayerId>(
+        (localStorage.getItem('tile_layer') as TileLayerId) || 'osm'
+    );
 
     let markers = ref<MarkerDetail<Record<string, any>>[]>([]);
     let polylines = ref<PolylineDetail<Record<string, any>>[]>([])
@@ -35,10 +103,27 @@ export default function mapUtil() {
     const initMap = (el: string) => {
         const m = LeafletMap(el).setView([9.9178343, 78.0815385], 11);
         map.value = m;
-        tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        const savedId = (localStorage.getItem('tile_layer') as TileLayerId) || 'osm';
+        currentTileLayerId.value = savedId;
+        const def = TILE_LAYERS[savedId]!;
+        activeTileLayer.value = tileLayer(def.url, {
+            maxZoom: def.maxZoom,
+            attribution: def.attribution
         }).addTo(m);
+    }
+
+    const changeTileLayer = (id: TileLayerId) => {
+        if (!map.value) return;
+        if (activeTileLayer.value) {
+            map.value.removeLayer(activeTileLayer.value);
+        }
+        const def = TILE_LAYERS[id]!;
+        activeTileLayer.value = tileLayer(def.url, {
+            maxZoom: def.maxZoom,
+            attribution: def.attribution
+        }).addTo(map.value);
+        currentTileLayerId.value = id;
+        localStorage.setItem('tile_layer', id);
     }
 
     const addMarker = (latitude: number, longitude: number, options?: {
@@ -185,7 +270,9 @@ export default function mapUtil() {
         markers,
         polylines,
         geoJsons,
+        currentTileLayerId,
         initMap,
+        changeTileLayer,
         addGeoJson,
         addMarker,
         removeMarker,
