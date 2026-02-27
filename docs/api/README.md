@@ -13,6 +13,7 @@ This directory contains detailed documentation for each API endpoint supported b
 | [Matrix](./matrix.md) | `/sources_to_targets` | `GET` | Matrix | Travel time/distance matrix for multiple origins and destinations |
 | [Trace Route](./trace_route.md) | `/trace_route` | `POST` | Trace Route | Map matching — snaps raw GPS traces to the road network |
 | [Locate](./locate.md) | `/locate` | `GET` | — | Road network inspection and coordinate snapping |
+| [Status](./status.md) | `/status` | `GET` | Settings | Real-time health check to verify endpoint accessibility |
 
 ---
 
@@ -50,6 +51,13 @@ Matches a sequence of raw GPS coordinates to the most likely path on the road ne
 Snaps coordinates to the road network and returns detailed attributes about the nearest road edges and intersections. Provides road classification, speed data, access flags, surface type, lane count, and more.
 
 **Key use cases:** Road attribute inspection, access validation, speed data retrieval, coordinate snapping, map data QA.
+
+---
+
+### [Status API](./status.md)
+Provides a quick heartbeat mechanism to check if the Valhalla server is running and accessible. Frequently used by load balancers, container orchestration tools, or API gateways to determine service health.
+
+**Key use cases:** Endpoint validation, health checks, uptime monitoring, orchestrator probes.
 
 ---
 
