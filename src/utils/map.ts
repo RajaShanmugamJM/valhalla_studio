@@ -114,7 +114,7 @@ export default function mapUtil() {
 
     const addPolyLines = (p: number[][][], options?: PolylineOptions, meta?: Record<string, any>) => {
         const polylineLayer = polyline(p as any, {
-            color: options?.color ?? 'blue',
+            color: options?.color ?? '#2563eb',
             weight: options?.weight ?? 5,
             opacity: options?.opacity ?? 0.7,
             smoothFactor: options?.smoothFactor ?? 1

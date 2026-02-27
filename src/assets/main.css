@@ -1,5 +1,8 @@
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
+@import "./theme.css";
+@import "./components.css";
+@import "./transitions.css";
 
 html,
 body,
